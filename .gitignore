@@ -1,0 +1,15 @@
+# Secrets — never commit real tokens
+tokens.json
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
