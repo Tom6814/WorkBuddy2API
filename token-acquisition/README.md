@@ -1,10 +1,6 @@
 # WorkBuddy Auth Token 获取方法
 
-> 目标：在 **不逆向客户端二进制** 的前提下，拿到属于你自己的 WorkBuddy（CodeBuddy 桌面端）会话令牌（`access_token` + `refresh_token`），用于本项目的 `CODEBUDDY_AUTH_TOKEN` 环境变量或 `tokens.json`。
->
-> 本文所有命令均使用系统**自带工具**（macOS Terminal、Windows PowerShell），无需安装任何脚本或额外依赖。
 
----
 
 ## ⚠️ 合法性边界
 
