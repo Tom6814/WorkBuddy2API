@@ -23,7 +23,7 @@
 
 ## 快速开始
 
-### 1. 拿到 CodeBuddy Token
+### 1. 拿到 WodeBuddy Token
 
 登录 WorkBuddy 后，token 会自动存在本地：
 
