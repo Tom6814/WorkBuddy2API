@@ -1,4 +1,4 @@
-# 🚀 CodeBuddy API Server
+# 🚀 WodeBuddy API Server
 
 把 WorkBuddy 的内部 API 包装成 **OpenAI 兼容的 REST API**，一行部署，随处调用。
 
