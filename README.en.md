@@ -1,4 +1,4 @@
-# 🚀 CodeBuddy API Server
+# 🚀 WodeBuddy2API
 
 Wrap WorkBuddy's internal API into an **OpenAI-compatible REST API** — deploy in one line, call from anywhere.
 
@@ -23,7 +23,7 @@ A featherweight proxy that turns WorkBuddy's internal API into a standard **Open
 
 ## Quick Start
 
-### 1. Get the CodeBuddy Token
+### 1. Get the WodeBuddy Token
 
 After logging into WorkBuddy, the token is stored locally:
 
