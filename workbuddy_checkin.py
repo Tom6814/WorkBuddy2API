@@ -220,16 +220,54 @@ def do_sign(token_info: dict) -> int:
     return 1
 
 
-def run_daemon(token_info: dict, hour: int, minute: int):
-    """守护模式：常驻运行，每天指定时间自动签到。"""
-    print(f"[*] 守护模式启动：每天 {hour:02d}:{minute:02d} 自动签到，Ctrl+C 停止", flush=True)
+def do_night_owl(token_info: dict) -> int:
+    """夜猫子任务：夜间 23:00-8:00 用 GLM-5.2 新建对话并成功使用（每天 1 次，累计 3 天）。
+
+    任务完成判定为服务端统计"用 GLM-5.2 成功发起一次对话"。这里用最小化
+    请求（stream、max_tokens=8）完成一次真实对话。
+    """
+    if not ensure_token_valid(token_info):
+        return 1
+    print("[→] 执行夜猫子任务（GLM-5.2 对话）...", flush=True)
+    try:
+        # 新建 client 实例 → 不带 conversationId → 等价于"新建对话"
+        client = ApiClient(ENDPOINT, token_info)
+        result = client.chat_completion(
+            messages=[{"role": "user", "content": "你好，请简单回应"}],
+            model="glm-5.2",
+            max_tokens=8,
+            stream=True,
+            thinking_level=None,
+        )
+        if result:
+            print(f"[✓] GLM-5.2 对话成功（content_len={len(result.get('content', ''))}）", flush=True)
+            return 0
+        print("[✗] GLM-5.2 对话未返回内容", file=sys.stderr)
+        return 1
+    except Exception as e:
+        print(f"[✗] 夜猫子任务异常: {e}", file=sys.stderr)
+        return 1
+
+
+def run_daemon(token_info: dict, hour: int, minute: int, owl_hour: int = 23, owl_minute: int = 0):
+    """守护模式：常驻运行，每日自动执行签到 + 夜猫子任务。"""
+    print(f"[*] 守护模式启动：每天 {hour:02d}:{minute:02d} 签到，{owl_hour:02d}:{owl_minute:02d} 夜猫子任务，Ctrl+C 停止", flush=True)
+    last_sign_day: str | None = None
+    last_owl_day: str | None = None
     while True:
         now = datetime.now()
-        if now.hour == hour and now.minute == minute:
+        today = now.strftime("%Y-%m-%d")
+        if (now.hour, now.minute) == (hour, minute) and last_sign_day != today:
             print(f"[{now:%Y-%m-%d %H:%M}] 到达签到时间", flush=True)
             do_sign(token_info)
-            # 跳过本分钟剩余时间，避免重复触发
-            time.sleep(60)
+            last_sign_day = today
+            time.sleep(30)
+            continue
+        if (now.hour, now.minute) == (owl_hour, owl_minute) and last_owl_day != today:
+            print(f"[{now:%Y-%m-%d %H:%M}] 到达夜猫子时间", flush=True)
+            do_night_owl(token_info)
+            last_owl_day = today
+            time.sleep(30)
             continue
         time.sleep(20)
 
@@ -241,7 +279,9 @@ def main():
     )
     parser.add_argument("--daemon", action="store_true", help="守护模式：常驻运行，每天自动签到（默认）")
     parser.add_argument("--time", type=str, default="09:00", help="守护模式签到时间 HH:MM（默认 09:00）")
+    parser.add_argument("--owl-time", type=str, default="23:00", help="守护模式夜猫子任务时间 HH:MM（默认 23:00）")
     parser.add_argument("--sign", action="store_true", help="单次签到（cron/systemd 用）")
+    parser.add_argument("--night-owl", action="store_true", help="手动触发一次夜猫子任务（GLM-5.2 对话）")
     parser.add_argument("--check", action="store_true", help="仅查询签到状态")
     parser.add_argument("--auth-file", type=str, help="指定本地 auth 文件路径（仅本机模式）")
     args = parser.parse_args()
@@ -272,16 +312,22 @@ def main():
     if args.sign:
         sys.exit(do_sign(token_info))
 
+    if args.night_owl:
+        sys.exit(do_night_owl(token_info))
+
     # 默认/守护模式
     try:
         hh, mm = (int(x) for x in args.time.split(":"))
         if not (0 <= hh < 24 and 0 <= mm < 60):
             raise ValueError
+        ohh, omm = (int(x) for x in args.owl_time.split(":"))
+        if not (0 <= ohh < 24 and 0 <= omm < 60):
+            raise ValueError
     except ValueError:
-        print(f"[✗] 无效的签到时间: {args.time}，应为 HH:MM", file=sys.stderr)
+        print(f"[✗] 无效的时间参数: {args.time} / {args.owl_time}，应为 HH:MM", file=sys.stderr)
         sys.exit(1)
 
-    run_daemon(token_info, hh, mm)
+    run_daemon(token_info, hh, mm, ohh, omm)
 
 
 if __name__ == "__main__":
