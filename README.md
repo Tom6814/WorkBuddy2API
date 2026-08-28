@@ -136,9 +136,11 @@ glm-5.2            glm-5.0-turbo           glm-5v-turbo
 
 # HY
 hy3                hy3-preview             hy3-preview-agent
+hy4-preview
 
 # 生图
 hunyuan-image-v3.0                        （文生图）
+hunyuan-image-v3.0-art                    （文生图·艺术风格）
 hunyuan-image-v2.0-general-edit           （图生图）
 ```
 

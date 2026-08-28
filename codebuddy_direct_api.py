@@ -83,6 +83,7 @@ THINKING_CAPABLE_MODELS = {
     "kimi-k2.5", "kimi-k2.6", "kimi-k2.7", "kimi-k3-1",
     # HY 系列
     "hy3-preview", "hy3-preview-agent",
+    "hy4-preview",
     # Hunyuan
     "hunyuan-2.0-thinking",
 }
@@ -956,11 +957,13 @@ KNOWN_CHAT_MODELS = {
     "glm-4.7", "glm-5.0", "glm-5.1", "glm-5.2", "glm-5.0-turbo", "glm-5v-turbo",
     # HY 系列
     "hy3", "hy3-preview", "hy3-preview-agent",
+    "hy4-preview",
 }
 
 # 生图模型（已在 /v2/images/* 实测验证可用）
 KNOWN_IMAGE_MODELS = {
     "hunyuan-image-v3.0",                # 文生图
+    "hunyuan-image-v3.0-art",            # 文生图（艺术风格）
     "hunyuan-image-v2.0-general-edit",   # 图生图
 }
 
