@@ -1,0 +1,22 @@
+# WorkBuddy 每日签到自动化 — Docker 部署
+# 构建: docker build -f Dockerfile.checkin -t wb-checkin .
+# 运行: docker run -d --name wb-checkin --restart unless-stopped \
+#         -e CODEBUDDY_AUTH_TOKEN=你的access_token \
+#         -e CODEBUDDY_REFRESH_TOKEN=你的refresh_token \
+#         -v wb-checkin-data:/root \
+#         wb-checkin
+FROM python:3.11-slim
+
+# 时区（签到时间按容器本地时间计算，默认北京时间）
+ENV TZ=Asia/Shanghai
+RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY codebuddy_direct_api.py .
+COPY workbuddy_checkin.py .
+
+# 默认以守护模式运行：常驻，每天 09:00 自动签到
+# token 续期后持久化到 /root/.workbuddy_checkin_token.json（挂载卷保留）
+CMD ["python", "workbuddy_checkin.py", "--daemon"]
