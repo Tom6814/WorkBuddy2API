@@ -128,7 +128,7 @@ glm-4.7            glm-5.0                 glm-5.1
 glm-5.2            glm-5.0-turbo           glm-5v-turbo
 
 # HY
-hy3                hy3-preview             hy3-preview-agent
+hy3                hy3-preview (free)      hy3-preview-agent (paid)
 hy4-preview
 
 # Image

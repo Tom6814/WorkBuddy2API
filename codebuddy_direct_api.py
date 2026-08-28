@@ -956,6 +956,7 @@ KNOWN_CHAT_MODELS = {
     # GLM 系列
     "glm-4.7", "glm-5.0", "glm-5.1", "glm-5.2", "glm-5.0-turbo", "glm-5v-turbo",
     # HY 系列
+    # hy3-preview 免费版；hy3-preview-agent 收费版（x0.04 credits，功能相同）
     "hy3", "hy3-preview", "hy3-preview-agent",
     "hy4-preview",
 }
@@ -969,6 +970,12 @@ KNOWN_IMAGE_MODELS = {
 
 # 全部支持模型
 ALL_SUPPORTED_MODELS = KNOWN_CHAT_MODELS | KNOWN_IMAGE_MODELS
+
+# 免费模型（调用不消耗 credits/积分；依据内置 product 配置的 credits 字段判定）
+FREE_MODELS = {
+    "hy3-preview",   # Hy3 preview 免费版（credits 为空）
+    # hy3-preview-agent 为收费版（x0.04 credits），不在本集合中
+}
 
 
 # ── Model Listing ──────────────────────────────────────────────────────────

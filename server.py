@@ -51,6 +51,7 @@ from codebuddy_direct_api import (
     KNOWN_CHAT_MODELS,
     KNOWN_IMAGE_MODELS,
     ALL_SUPPORTED_MODELS,
+    FREE_MODELS,
 )
 
 # ── FastAPI imports ────────────────────────────────────────────────────────
@@ -330,6 +331,7 @@ async def list_models(request: Request):
             "object": "model",
             "created": 0,
             "owned_by": "codebuddy",
+            "free": m in FREE_MODELS,
         }
         if m in KNOWN_IMAGE_MODELS:
             entry["capabilities"] = {"image": True, "chat": False}
