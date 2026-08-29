@@ -974,6 +974,7 @@ ALL_SUPPORTED_MODELS = KNOWN_CHAT_MODELS | KNOWN_IMAGE_MODELS
 # 免费模型（调用不消耗 credits/积分；依据内置 product 配置的 credits 字段判定）
 FREE_MODELS = {
     "hy3-preview",   # Hy3 preview 免费版（credits 为空）
+    "hy4-preview",   # Hy4 preview 免费体验版（上游 2026-08-29 更新）
     # hy3-preview-agent 为收费版（x0.04 credits），不在本集合中
 }
 

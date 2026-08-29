@@ -136,7 +136,7 @@ glm-5.2            glm-5.0-turbo           glm-5v-turbo
 
 # HY
 hy3                hy3-preview（免费）    hy3-preview-agent（收费）
-hy4-preview
+hy4-preview（免费体验）
 
 # 生图
 hunyuan-image-v3.0                        （文生图）
