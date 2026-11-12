@@ -165,7 +165,12 @@ def _request(method: str, path: str, headers: dict, body: str = "{}") -> tuple[i
         conn.request(method, path, body=body, headers=headers)
         resp = conn.getresponse()
         raw = resp.read().decode("utf-8")
-        return resp.status, json.loads(raw)
+        try:
+            return resp.status, json.loads(raw)
+        except json.JSONDecodeError:
+            # 网关层错误（如 401/502 HTML 页面）不是 JSON；
+            # 直接崩溃会丢失状态码，上层只剩裸 traceback
+            return resp.status, {"code": -1, "msg": f"non-JSON response (HTTP {resp.status}): {raw[:120]}"}
     finally:
         conn.close()
 
