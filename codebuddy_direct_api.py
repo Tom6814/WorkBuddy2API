@@ -65,6 +65,14 @@ IMAGE_EDITS_PATH = "/v2/images/edits"
 TOKEN_REFRESH_PATH = "/v2/plugin/auth/token/refresh"
 
 AUTH_FILE_PATHS = [
+    # Windows 实测：Electron userData 位于 %LOCALAPPDATA%\CodeBuddyExtension
+    # （部分安装为 %APPDATA%，一并探测）
+    os.path.join(os.environ.get("LOCALAPPDATA")
+                 or os.path.join(os.path.expanduser("~"), "AppData", "Local"),
+                 "CodeBuddyExtension", "Data", "Public", "auth", "workbuddy-desktop.info"),
+    os.path.join(os.environ.get("APPDATA")
+                 or os.path.join(os.path.expanduser("~"), "AppData", "Roaming"),
+                 "CodeBuddyExtension", "Data", "Public", "auth", "workbuddy-desktop.info"),
     DEFAULT_AUTH_FILE,
     os.path.expanduser("~/.workbuddy/auth/workbuddy-desktop.info"),
     os.path.expanduser("~/.config/workbuddy/auth/workbuddy-desktop.info"),
